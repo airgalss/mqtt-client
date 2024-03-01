@@ -1,6 +1,8 @@
 .DS_Store
 publisher
+publisher_static
 subscriber
-log/
+subscriber_static
+log.o
 lib/**
 !lib/.gitkeep

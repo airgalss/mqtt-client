@@ -1,23 +1,51 @@
-SHELL := bash
-LDFLAGS := -Wl,-rpath='$$ORIGIN'/../lib
-CFLAGS := -g -Iinclude
-TARGET := src/publisher src/subscriber
-DEPS := lib/liblog.so lib/libmosquitto.so
-.PHONY: clean
+CFLAGS := -Iinclude
+LDFLAGS := -Llib -Wl,-rpath='$$ORIGIN'/../lib
+LDLIBS := -llog -lmosquitto
 
-all: $(TARGET)
+SHARED_EXE := src/publisher src/subscriber
+STATIC_EXE := src/publisher_static src/subscriber_static
+SHARED_LIBS := lib/liblog.so lib/libmosquitto.so
+STATIC_LIBS := lib/liblog.a lib/libmosquitto.a
+SOVERSION := 1
 
-$(TARGET): $(DEPS)
+.PHONY: default clean static shared
+default: shared
+
+static: $(STATIC_EXE)
+
+shared: $(SHARED_EXE)
+
+%_static: %.c $(STATIC_LIBS)
+	$(CC) -static -static-libgcc $(CFLAGS) $< $(LDFLAGS) $(LDLIBS) -lssl \
+	-lcrypto -lrt -ldl -lpthread -o $@
+
+%: %.c $(SHARED_LIBS)
+	$(CC) $(CFLAGS) $< $(LDFLAGS) $(LDLIBS) -o $@ 
+
+lib/libmosquitto.a:
+	$(MAKE) -C src/mosquitto/lib WITH_STATIC_LIBRARIES=yes WITH_SHARED_LIBRARIES=no; \
+	cp src/mosquitto/lib/libmosquitto.a lib/libmosquitto.a
 
 lib/libmosquitto.so:
 	$(MAKE) -C src/mosquitto/lib; \
 	cp src/mosquitto/lib/libmosquitto.so.1 lib/libmosquitto.so.1; \
 	ln -sf libmosquitto.so.1 lib/libmosquitto.so
 
-lib/liblog.so: src/log/src/log.c src/log/src/log.h
-	$(CC) -fPIC -shared -DLOG_USE_COLOR -c $< -o lib/liblog.so.1; \
-	ln -sf liblog.so.1 lib/liblog.so
+lib/liblog.a: src/log/log.o
+	$(AR) cr $@ $^
+
+lib/liblog.so: src/log/log.o
+	$(CC) -shared -DLOG_USE_COLOR $^ -o lib/liblog.so.$(SOVERSION); \
+	ln -sf liblog.so.$(SOVERSION) lib/liblog.so
+
+src/log/log.o: src/log/log.c src/log/log.h
+	$(CC) -fPIC -DLOG_USE_COLOR -c $< -o $@
 
 clean:
-	rm -f src/{publisher,subscriber} lib/*
+	-rm -f src/publisher \
+           src/publisher_static \
+           src/subscriber \
+           src/subscriber_static \
+           src/log/log.o \
+           lib/*
 	$(MAKE) -C src/mosquitto/lib clean
