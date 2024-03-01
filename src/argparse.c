@@ -43,7 +43,7 @@ void argparse(int argc, char* argv[])
         switch (opt)
         {
         case 'h':
-            strncpy(host, optarg, strlen(optarg));
+            strcpy(host, optarg);
             break;
         case 'p':
             sscanf(optarg, "%d", &port);

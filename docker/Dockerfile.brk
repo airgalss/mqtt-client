@@ -1,0 +1,10 @@
+FROM alpine:latest
+
+RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.tuna.tsinghua.edu.cn/g' /etc/apk/repositories \
+ && apk --update --no-cache add mosquitto \
+ && echo -e "allow_anonymous true\nlistener 1883 0.0.0.0" >> /etc/mosquitto/mosquitto.conf \
+ && rm -rf /var/cache/apk/*
+
+EXPOSE 1883
+
+ENTRYPOINT ["mosquitto", "-c", "/etc/mosquitto/mosquitto.conf"]

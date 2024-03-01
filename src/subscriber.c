@@ -61,7 +61,7 @@ int communication(){
 
     status = mosquitto_connect(mosq, host, port, keepalive);
     if(status != 0){
-        log_error("Failed to connect to a broker");
+        log_error("Failed to connect to a broker %s:%d", host, port);
         return 1;
     }
     log_info("Connected the broker %s:%d successfully", host, port);

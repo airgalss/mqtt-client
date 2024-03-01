@@ -1,0 +1,32 @@
+version: "3"
+
+services:
+  base:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.bld
+
+  publisher:
+    build:
+      context: ./docker
+      dockerfile: Dockerfile.pub
+    container_name: mqtt_publisher
+    depends_on:
+      - base
+      - broker
+      - subscriber
+  
+  subscriber:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.sub
+    container_name: mqtt_subscriber
+    depends_on:
+      - base
+      - broker
+  
+  broker:
+    build:
+      context: ./docker
+      dockerfile: Dockerfile.brk
+    container_name: mqtt_broker

@@ -1,0 +1,11 @@
+FROM alpine:latest
+
+COPY --from=mqtt-client_base /app/data/* /data/
+
+COPY --from=mqtt-client_base /app/lib/* /lib/
+
+COPY --from=mqtt-client_base /app/src/publisher /app/
+
+WORKDIR /app
+
+CMD sleep 1 && ./publisher -h broker
