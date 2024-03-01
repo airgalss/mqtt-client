@@ -1,5 +1,5 @@
 SHELL := bash
-LDFLAGS := -Wl,-rpath='$$ORIGIN'/..lib
+LDFLAGS := -Wl,-rpath='$$ORIGIN'/../lib
 CFLAGS := -g -Iinclude
 TARGET := src/publisher src/subscriber
 DEPS := lib/liblog.so lib/libmosquitto.so
