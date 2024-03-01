@@ -1,3 +1,6 @@
 [submodule "src/log"]
 	path = src/log
 	url = https://github.com/rxi/log.c
+[submodule "src/mosquitto"]
+	path = src/mosquitto
+	url = https://github.com/eclipse/mosquitto

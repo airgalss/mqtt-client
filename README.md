@@ -11,6 +11,7 @@ sudo apt install mosquitto
 2. install MQTT development library
 ```
 sudo apt install libmosquitto-dev
+sudo apt install libssl-dev
 ```
 3. compile
 ```
