@@ -3,7 +3,7 @@ This example, based on the libmosquitto library and implemented in the C languag
 
 In this scenario, a simulated terminal device acts as an MQTT publisher, reporting the collected data. Subsequently, the central station acts as an MQTT subscriber, subscribing to the topic of this message. Upon successfully receiving the reported data, it notifies the simulated terminal device.
 
-# Compile
+# local deploy
 1. Clone this project and its submodules
 ```
 git clone --recurse-submodule https://github.com/airgalss/mqtt-example
@@ -29,19 +29,23 @@ Otherwise, you can compile with static linking
 ```
 make static
 ```
-
-# Run
-1. Change directory to the location of the executable file.
+4. Change directory to the location of the executable file.
 ```
 cd src
 ```
-2. Firstly run as a MQTT subscriber.
+5. Firstly run as a MQTT subscriber.
 ```
 ./subscriber
 ```
-5. Then open a new tab and run as a MQTT publisher.
+6. Then open a new tab and run as a MQTT publisher.
 ```
 ./publisher
+```
+
+# docker deploy
+1. Download [docker-compose](https://github.com/docker/compose) and deploy it with just one command
+```
+docker-compose up
 ```
 
 # License
