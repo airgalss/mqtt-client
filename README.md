@@ -8,9 +8,8 @@ In this scenario, a simulated terminal device acts as an MQTT publisher, reporti
 ```
 sudo apt install mosquitto
 ```
-2. install MQTT development library
+2. install dependency
 ```
-sudo apt install libmosquitto-dev
 sudo apt install libssl-dev
 ```
 3. compile
