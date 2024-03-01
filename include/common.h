@@ -5,11 +5,11 @@
 #define LOG_LEVEL LOG_TRACE
 #define BUF_SIZE 1024
 
-const char *host = "127.0.0.1";
-const int port = 1883;
-const int keepalive_sec = 60;
-const char *report_topic = "report";
-const char *feedback_topic = "feedback";
-const bool retain = false;
-const int qos = 0;
-const int timeout = 600;
+extern void argparse(int, char*[]);
+
+extern char host[128];
+extern int port;
+extern int keepalive;
+extern char report_topic[128];
+extern char feedback_topic[128];
+extern int qos;

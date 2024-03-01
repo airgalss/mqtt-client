@@ -16,7 +16,7 @@ void on_message(struct mosquitto *mosq, void *obj, const struct mosquitto_messag
     log_info("Disconnect from the broker");
 }
 
-int main(){
+int communication(){
     int status;
     struct mosquitto *mosq;
     char *report_file = "../data/intraday.json";
@@ -34,7 +34,7 @@ int main(){
 
     mosquitto_message_callback_set(mosq, on_message);
 
-    status = mosquitto_connect(mosq, host, port, keepalive_sec);
+    status = mosquitto_connect(mosq, host, port, keepalive);
     if(status != 0){
         log_error("Failed to connect to a broker");
         return 1;
@@ -54,7 +54,7 @@ int main(){
        return 1;
     }
     int len = fread(message, sizeof(char), BUF_SIZE, file);
-    status = mosquitto_publish(mosq, NULL, report_topic, len, message, qos, retain);
+    status = mosquitto_publish(mosq, NULL, report_topic, len, message, qos, false);
     if(status != 0){
         log_error("Failed to publish a message");
         return 1;
@@ -62,7 +62,7 @@ int main(){
     log_info("Publish message with length %d on the topic \"%s\" successfully", len, report_topic);
     printf("%s", message);
 
-    status = mosquitto_loop_forever(mosq, timeout, 1);
+    status = mosquitto_loop_forever(mosq, -1, 1);
     if(status != 0){
         log_error("Failed to continue event loop");
         return 1;
@@ -70,4 +70,11 @@ int main(){
     log_info("End event loop");
     mosquitto_destroy(mosq);
     mosquitto_lib_cleanup();
+    return 0;
+}
+
+int main(int argc, char *argv[]){
+    argparse(argc, argv);
+    int ret = communication();
+    return ret;
 }

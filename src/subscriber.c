@@ -33,7 +33,7 @@ void on_message(struct mosquitto *mosq, void *obj, const struct mosquitto_messag
     int len = fread(message, sizeof(char), BUF_SIZE, file);
     fclose(file);
 
-    status = mosquitto_publish(mosq, NULL, feedback_topic, len, message, qos, retain);
+    status = mosquitto_publish(mosq, NULL, feedback_topic, len, message, qos, false);
     if(status != 0){
         log_error("Failed to publish a message");
         return;
@@ -42,7 +42,7 @@ void on_message(struct mosquitto *mosq, void *obj, const struct mosquitto_messag
     printf("%s\n", message);
 }
 
-int main(){
+int communication(){
     int status;
     struct mosquitto *mosq;
 
@@ -59,7 +59,7 @@ int main(){
     mosquitto_message_callback_set(mosq, on_message);
     mosquitto_publish_callback_set(mosq, on_publish);
 
-    status = mosquitto_connect(mosq, host, port, keepalive_sec);
+    status = mosquitto_connect(mosq, host, port, keepalive);
     if(status != 0){
         log_error("Failed to connect to a broker");
         return 1;
@@ -73,7 +73,7 @@ int main(){
     }
     log_info("Subscribe the topic \"%s\" successfully", report_topic);
 
-    status = mosquitto_loop_forever(mosq, timeout, 1);
+    status = mosquitto_loop_forever(mosq, -1, 1);
     if(status != 0){
         log_error("Failed to continue event loop");
         return 1;
@@ -81,4 +81,10 @@ int main(){
     log_info("End event loop");
     mosquitto_destroy(mosq);
     mosquitto_lib_cleanup();
+    return 0;
+}
+
+int main(int argc, char *argv[]){
+    argparse(argc, argv);
+    return communication();
 }

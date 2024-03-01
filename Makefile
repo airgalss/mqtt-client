@@ -1,4 +1,4 @@
-CFLAGS := -Iinclude
+CFLAGS := -g -Iinclude
 LDFLAGS := -Llib -Wl,-rpath='$$ORIGIN'/../lib
 LDLIBS := -llog -lmosquitto
 
@@ -6,6 +6,7 @@ SHARED_EXE := src/publisher src/subscriber
 STATIC_EXE := src/publisher_static src/subscriber_static
 SHARED_LIBS := lib/liblog.so lib/libmosquitto.so
 STATIC_LIBS := lib/liblog.a lib/libmosquitto.a
+DEPS := include/common.h include/log.h include/mosquitto.h
 SOVERSION := 1
 
 .PHONY: default clean static shared
@@ -15,12 +16,12 @@ static: $(STATIC_EXE)
 
 shared: $(SHARED_EXE)
 
-%_static: %.c $(STATIC_LIBS)
-	$(CC) -static -static-libgcc $(CFLAGS) $< $(LDFLAGS) $(LDLIBS) -lssl \
-	-lcrypto -lrt -ldl -lpthread -o $@
+%_static: %.c src/argparse.c $(STATIC_LIBS) $(DEPS)
+	$(CC) -static -static-libgcc $(CFLAGS) $< src/argparse.c $(LDFLAGS) $(LDLIBS) \
+	-lssl -lcrypto -lrt -ldl -lpthread -o $@
 
-%: %.c $(SHARED_LIBS)
-	$(CC) $(CFLAGS) $< $(LDFLAGS) $(LDLIBS) -o $@ 
+%: %.c src/argparse.c $(SHARED_LIBS) $(DEPS)
+	$(CC) $(CFLAGS) $< src/argparse.c $(LDFLAGS) $(LDLIBS) -o $@ 
 
 lib/libmosquitto.a:
 	$(MAKE) -C src/mosquitto/lib WITH_STATIC_LIBRARIES=yes WITH_SHARED_LIBRARIES=no; \
