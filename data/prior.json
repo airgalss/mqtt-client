@@ -1,0 +1,31 @@
+{
+  "creditCode": "91440300MA5FETNL3A",
+  "vppPrices": {
+    "11:45": 100,
+    "12:00": 150
+  },
+  "planTime": "20230410",
+  "planName": "schedule testing before April 10, 2023",
+  "vppPlans": {
+    "11:45": 1,
+    "12:00": 1
+  },
+  "invitationId": "023041000001",
+  "responsePlan": [
+    {
+      "resourceId": "0944000047844029",
+      "declare": {
+        "11:45": 500,
+        "12:00": 500
+      }
+    },
+    {
+      "resourceId": "0944000047966459",
+      "declare": {
+        "11:45": 500,
+        "12:00": 500
+      }
+    }
+  ],
+  "planCode": "2023041000001"
+}

@@ -1,0 +1,5 @@
+publisher
+subscriber
+log/
+lib/**
+!lib/.gitkeep

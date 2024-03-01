@@ -1,0 +1,19 @@
+{
+  "creditCode": "91441300MA53A9YJXR",
+  "taskCode": "202304121137",
+  "taskName": "2023-04-12 emergency task",
+  "resourceList": [
+    {
+      "targetPower": 801.126372,
+      "startTime": "20230412114500",
+      "endTime": "20230412120000",
+      "resourceId": "0943010017439129"
+    },
+    {
+      "targetPower": 275.0817643176,
+      "startTime": "20230412114500",
+      "endTime": "20230412120000",
+      "resourceId": "0946050017719067"
+    }
+  ]
+}
