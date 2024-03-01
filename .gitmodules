@@ -1,6 +1,8 @@
 [submodule "src/log"]
 	path = src/log
 	url = https://github.com/rxi/log.c
+	ignore = untracked
 [submodule "src/mosquitto"]
 	path = src/mosquitto
 	url = https://github.com/eclipse/mosquitto
+	ignore = untracked
